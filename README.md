@@ -1,6 +1,6 @@
-# Task Manager API — DevOps Project B3 SR
+# Task Manager API — Projet DevOps B3 SR
 
-A REST API for managing tasks, built with **Flask** and **PostgreSQL**, fully containerized with **Docker** and **Docker Compose**, deployed on **Microsoft Azure**.
+Une API REST de gestion de tâches, construite avec **Flask** et **PostgreSQL**, entièrement conteneurisée avec **Docker** et **Docker Compose**, déployée sur **Microsoft Azure**.
 
 > SUP DE VINCI — 2025/2026 — B3 SR
 
@@ -17,49 +17,49 @@ A REST API for managing tasks, built with **Flask** and **PostgreSQL**, fully co
 │  └──────────────┘      └────────┬────────┘  │
 │                                 │           │
 │                         postgres_data       │
-│                         (named volume)      │
+│                         (volume nommé)      │
 └─────────────────────────────────────────────┘
          │
     taskmanager_network (bridge)
 ```
 
-- The **API** container handles all HTTP requests (Flask + Gunicorn)
-- The **DB** container stores data persistently via a named volume
-- Both containers communicate over a **custom bridge network**
-- Secrets are managed via a **`.env` file** (never committed to Git)
-- The API is deployed on an **Azure VM** and accessible publicly
+- Le conteneur **API** traite toutes les requêtes HTTP (Flask + Gunicorn)
+- Le conteneur **DB** stocke les données de façon persistante via un volume nommé
+- Les deux conteneurs communiquent via un **réseau bridge personnalisé**
+- Les secrets sont gérés via un fichier **`.env`** (jamais envoyé sur Git)
+- L'API est déployée sur une **VM Azure** et accessible publiquement
 
 ---
 
-## Quick Start
+## Démarrage rapide
 
-### Prerequisites
-- [Docker](https://docs.docker.com/get-docker/) installed
-- [Docker Compose](https://docs.docker.com/compose/install/) installed
+### Prérequis
+- [Docker](https://docs.docker.com/get-docker/) installé
+- [Docker Compose](https://docs.docker.com/compose/install/) installé
 
-### 1. Clone the repository
+### 1. Cloner le dépôt
 ```bash
 git clone https://github.com/perrolokoyflako/TaskManagerDevops.git
 cd TaskManagerDevops
 ```
 
-### 2. Configure environment variables
+### 2. Configurer les variables d'environnement
 ```bash
 cp .env.example .env
-# Edit .env and set your own password
+# Modifier .env et définir votre propre mot de passe
 ```
 
-### 3. Start all services
+### 3. Démarrer tous les services
 ```bash
 docker compose up -d
 ```
 
-### 4. Verify everything is running
+### 4. Vérifier que tout tourne
 ```bash
 docker compose ps
 ```
 
-### 5. Test the API
+### 5. Tester l'API
 ```bash
 curl http://localhost:5000/health
 # → {"status": "ok"}
@@ -67,90 +67,90 @@ curl http://localhost:5000/health
 
 ---
 
-## Live Demo
+## Démo en ligne
 
-The API is publicly accessible at:
+L'API est accessible publiquement à l'adresse :
 ```
 http://20.251.146.73:5000
 ```
 
 ---
 
-## API Endpoints
+## Endpoints de l'API
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/health` | Health check |
-| GET | `/tasks` | List all tasks |
-| GET | `/tasks/:id` | Get one task |
-| POST | `/tasks` | Create a task |
-| PATCH | `/tasks/:id` | Update a task |
-| DELETE | `/tasks/:id` | Delete a task |
-| GET | `/stats` | Task statistics |
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/health` | Vérification de l'état |
+| GET | `/tasks` | Lister toutes les tâches |
+| GET | `/tasks/:id` | Récupérer une tâche |
+| POST | `/tasks` | Créer une tâche |
+| PATCH | `/tasks/:id` | Modifier une tâche |
+| DELETE | `/tasks/:id` | Supprimer une tâche |
+| GET | `/stats` | Statistiques des tâches |
 
-### Example requests
+### Exemples de requêtes
 
-**Create a task:**
+**Créer une tâche :**
 ```bash
 curl -X POST http://localhost:5000/tasks \
   -H "Content-Type: application/json" \
-  -d '{"title": "My task", "description": "Details here", "priority": "high"}'
+  -d '{"title": "Ma tâche", "description": "Détails ici", "priority": "high"}'
 ```
 
-**Mark a task as done:**
+**Marquer une tâche comme terminée :**
 ```bash
 curl -X PATCH http://localhost:5000/tasks/1 \
   -H "Content-Type: application/json" \
   -d '{"done": true}'
 ```
 
-**Get statistics:**
+**Obtenir les statistiques :**
 ```bash
 curl http://localhost:5000/stats
 ```
 
 ---
 
-## Useful Commands
+## Commandes utiles
 ```bash
-# Start in background
+# Démarrer en arrière-plan
 docker compose up -d
 
-# View logs
+# Voir les logs
 docker compose logs -f
 
-# Stop everything
+# Arrêter tout
 docker compose down
 
-# Full reset (deletes database)
+# Réinitialisation complète (supprime la base de données)
 docker compose down -v
 
-# Rebuild after code changes
+# Reconstruire après modification du code
 docker compose up -d --build
 ```
 
 ---
 
-## Project Structure
+## Structure du projet
 ```
 TaskManagerDevops/
 ├── app/
-│   ├── app.py              # Flask application (routes + models)
-│   ├── requirements.txt    # Python dependencies
-│   ├── Dockerfile          # Multi-stage Docker build
-│   └── .dockerignore       # Files excluded from the image
-├── docker-compose.yml      # Service orchestration
-├── .env                    # Environment variables (NOT in Git)
-├── .env.example            # Template for .env
+│   ├── app.py              # Application Flask (routes + modèles)
+│   ├── requirements.txt    # Dépendances Python
+│   ├── Dockerfile          # Build Docker multi-stage
+│   └── .dockerignore       # Fichiers exclus de l'image
+├── docker-compose.yml      # Orchestration des services
+├── .env                    # Variables d'environnement (PAS sur Git)
+├── .env.example            # Modèle pour le .env
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## Security
+## Sécurité
 
-- App runs as a **non-root user** inside the container
-- Secrets stored in `.env`, excluded from Git via `.gitignore`
-- Database port **not exposed** publicly — only the API is
-- **Healthcheck** configured on both containers
+- L'application tourne en tant qu'**utilisateur non-root** dans le conteneur
+- Les secrets sont dans `.env`, exclu de Git via `.gitignore`
+- Le port de la base de données **n'est pas exposé** publiquement — uniquement l'API
+- Un **healthcheck** est configuré sur les deux conteneurs
