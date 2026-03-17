@@ -10,7 +10,7 @@ en local et en production sur Azure.
 | Environnement | URL de base | Statut |
 |---------------|-------------|--------|
 | Local (VM Azure) | http://localhost:5000 | Validé |
-| Production (Azure public) | http://20.251.146.73:5000 | Validé |
+| Production (Azure public) | http://YOUR_VM_IP:5000 | Validé |
 
 ---
 
@@ -233,7 +233,7 @@ Résultat : ####
 
 Vérifie que l'API est accessible depuis l'extérieur du serveur.
 ```bash
-curl http://20.251.146.73:5000/health
+curl http://YOUR_VM_IP:5000/health
 ```
 
 Réponse attendue :
