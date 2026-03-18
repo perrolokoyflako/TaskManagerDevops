@@ -9,8 +9,8 @@ en local et en production sur Azure.
 
 | Environnement | URL de base | Statut |
 |---------------|-------------|--------|
-| Local (VM Azure) | http://localhost:5000 | Validé |
-| Production (Azure public) | http://YOUR_VM_IP:5000 | Validé |
+| Local (VM Azure) | http://localhost:5000 | #### |
+| Production (Azure public) | http://YOUR_VM_IP:5000 | #### |
 
 ---
 
@@ -248,14 +248,14 @@ Résultat : ####
 
 | Test | Endpoint | Résultat |
 |------|----------|----------|
-| Health check | GET /health | PASS |
-| Créer une tâche | POST /tasks | PASS |
-| Lister les tâches | GET /tasks | PASS |
-| Récupérer par ID | GET /tasks/:id | PASS |
-| Modifier une tâche | PATCH /tasks/:id | PASS |
-| Filtrer les tâches | GET /tasks?done=false | PASS |
-| Statistiques | GET /stats | PASS |
-| Supprimer une tâche | DELETE /tasks/:id | PASS |
-| Validation erreurs | POST /tasks | PASS |
-| Persistance données | redémarrage conteneurs | PASS |
-| Accessibilité publique | GET /health (IP publique) | PASS |
+| Health check | GET /health | ### |
+| Créer une tâche | POST /tasks | ### |
+| Lister les tâches | GET /tasks | ### |
+| Récupérer par ID | GET /tasks/:id | ### |
+| Modifier une tâche | PATCH /tasks/:id | ### |
+| Filtrer les tâches | GET /tasks?done=false | ### |
+| Statistiques | GET /stats | ### |
+| Supprimer une tâche | DELETE /tasks/:id | ### |
+| Validation erreurs | POST /tasks | ### |
+| Persistance données | redémarrage conteneurs | ### |
+| Accessibilité publique | GET /health (IP publique) | ### |
