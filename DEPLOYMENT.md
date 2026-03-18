@@ -3,7 +3,7 @@
 ## Environnement cible
 
 L'application est déployée sur une machine virtuelle **Azure VM B1s**
-(Ubuntu 24.04 LTS) via **Microsoft Azure for Students**.
+(Ubuntu 24.04 LTS) via.
 
 ---
 
