@@ -19,8 +19,7 @@ services:
       retries: 5
 
   api:
-    build:
-      context: ./app
+    image: taskmanagerregistry.azurecr.io/taskmanager-api:latest
     container_name: taskmanager_api
     restart: unless-stopped
     environment:
