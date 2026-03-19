@@ -156,3 +156,4 @@ TaskManagerDevops/
 - Un **healthcheck** est configuré sur les deux conteneurs
 # Pipeline CI/CD validé le 19/03/2026
 # test secrets
+# Pipeline CI/CD opérationnel
