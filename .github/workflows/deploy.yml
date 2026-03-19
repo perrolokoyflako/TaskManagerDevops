@@ -1,24 +1,17 @@
 name: Build and Deploy Task Manager
 
-#  run this pipeline on every push to main branch
 on:
   push:
     branches: [main]
 
 jobs:
   build-and-deploy:
-    # GitHub cree  Ubuntu machine to run  pipeline
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Get the code
-      # Downloads repo onto the GitHub runner machine
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ── Step 2: Log into Azure Container Registry ────────────────
-      # The runner needs to authenticate with ACR to push the image
-      # Uses the secrets you stored in GitHub Settings
       - name: Log in to Azure Container Registry
         uses: docker/login-action@v3
         with:
@@ -26,27 +19,14 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      # ── Step 3: Build the Docker image ───────────────────────────
-      # Builds your Dockerfile exactly like you do locally
-      # Tags it with your ACR address so Docker knows where to push it
-      # Also tags it with the Git commit hash for traceability
       - name: Build Docker image
-        run: |
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/taskmanager-api:latest \
-                       -t ${{ secrets.ACR_LOGIN_SERVER }}/taskmanager-api:${{ github.sha }} \
-                       ./app
+        run: docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/taskmanager-api:latest -t ${{ secrets.ACR_LOGIN_SERVER }}/taskmanager-api:${{ github.sha }} ./app
 
-      # ── Step 4: Push image to ACR ────────────────────────────────
-      # Uploads the built image to your private Azure registry
-      # Your VM will pull from here in the next step
       - name: Push image to ACR
         run: |
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/taskmanager-api:latest
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/taskmanager-api:${{ github.sha }}
 
-      # ── Step 5: Deploy to Azure VM ───────────────────────────────
-      # SSH into your VM and run the deployment commands
-      # The pipeline logs in using the SSH key you stored as a secret
       - name: Deploy to Azure VM
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -54,22 +34,9 @@ jobs:
           username: ${{ secrets.VM_USERNAME }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            # Log into ACR from the VM so it can pull the new image
-            docker login ${{ secrets.ACR_LOGIN_SERVER }} \
-              -u ${{ secrets.ACR_USERNAME }} \
-              -p ${{ secrets.ACR_PASSWORD }}
-            
-            # Go to the project folder
+            docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }}
             cd ~/TaskManagerDevops
-            
-            # Pull the latest code from GitHub
             git pull origin main
-            
-            # Pull the new image from ACR
             docker compose pull
-            
-            # Restart with the new image (zero downtime: pulls first, then restarts)
             docker compose up -d
-            
-            # Clean up old unused images to save disk space
             docker image prune -f
