@@ -155,3 +155,4 @@ TaskManagerDevops/
 - Le port de la base de données **n'est pas exposé** publiquement — uniquement l'API
 - Un **healthcheck** est configuré sur les deux conteneurs
 # Pipeline CI/CD validé le 19/03/2026
+# test secrets
